@@ -1,0 +1,33 @@
+version: '2'
+
+services:
+
+  bpp-protocol-webserver:
+    build:
+      context: .
+      dockerfile: dockerfile
+    container_name: bpp-protocol-webserver
+    depends_on:
+      - mongo
+    environment:
+      ENV: prod
+      BPP_PRIVATE_KEY: ${BPP_PRIVATE_KEY}
+      BPP_PUBLIC_KEY: ${BPP_PUBLIC_KEY}
+      BPP_UNIQUE_KEY_ID: ${BPP_UNIQUE_KEY_ID}
+      BPP_ID: ${BPP_ID}
+      BG_DEFAULT_URL: ${BG_DEFAULT_URL}
+      MONGO_DATABASE_HOST: ${MONGO_DATABASE_HOST}
+      REGISTRY_BASE_URL: ${REGISTRY_BASE_URL}
+      VERIFICATION_ENABLE: ${VERIFICATION_ENABLE}
+    expose:
+      - 5555
+    ports:
+      - 5555:5555
+
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - "./data:/data/db"
